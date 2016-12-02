@@ -25,13 +25,13 @@ $2E constant P2SEL
 $2F constant P2REN
 $42 constant P2SEL2
 
-\ SLAVE UART registers
-\ $68 constant UCB0CTL0
-\ $69 constant UCB0CTL1
-\ $6A constant UCB0BR0
-\ $6B constant UCB0BR1
-\ $6E constant UCB0RXBUF
-\ $6F constant UCB0TXBUF
+\ SPI registers
+$68 constant UCB0CTL0
+$69 constant UCB0CTL1
+$6A constant UCB0BR0
+$6B constant UCB0BR1
+$6E constant UCB0RXBUF
+$6F constant UCB0TXBUF
 
 \ Timer A0_3 & A1_3
 $160 constant TA0CTL
@@ -52,6 +52,17 @@ $194 constant TA1CCR1
 $186 constant TA1CCTL2 
 $196 constant TA1CCR2 
 
+\ clock control
+$0056 constant DCOCTL
+$0057 constant BCSCTL1
+$0058 constant BCSCTL2
+
+\ calibration registers
+$10F6 constant TAG_DCO_30
+$0003 constant CAL_BC1_16MHZ
+$0002 constant CAL_DCO_16MHZ
+
+\ generic utils
 : bounds ( c-addr n -- c-addr-end c-addr-start )
     over + swap ;
 
@@ -62,6 +73,21 @@ $196 constant TA1CCR2
     <builds begin here $1FF and while 0 , repeat
     does>   begin dup  $1FF and while 1+  repeat eraseflashfrom ;
 
+\ clock speed
+: 16mhz ( -- )
+    TAG_DCO_30 dup CAL_DCO_16MHZ + c@ DCOCTL  c! \ set calibrated DCO
+                   CAL_BC1_16MHZ + c@ BCSCTL1 c! \ set calibrated BC1
+                   $02 BCSCTL2 cbis!  ;          \ set SMCLK divider to 2
+
+\ multiply by clock div
+: clk-div* ( n1 -- n2 )
+    BCSCTL2 c@ $02 and if 2* then ;
+
+\ us and ms which are multi-frequency aware
+: us clk-div* 0 ?do [ $3C00 , $3C00 , ] loop ;
+: ms clk-div* 0 ?do 998 us loop ;
+
+\ number formating
 : >number ( n -- c-addr n-len )
     0 <# #S #> ;
 
