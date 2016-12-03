@@ -120,6 +120,3 @@ compiletoflash
 \ make all leds black
 : off ( -- ) $00.00.00 leds ;
 
-16mhz
-init-spi
-r

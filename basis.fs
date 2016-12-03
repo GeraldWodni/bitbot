@@ -103,22 +103,17 @@ $0002 constant CAL_DCO_16MHZ
 : u.4 ( u -- ) 4 u.n ;
 : u.2 ( u -- ) 2 u.n ;
 
+\ set bit in addr to f
+: cbit! ( f x addr -- )
+    rot if cbis! else cbic! then ;
+
 \ turn red led on
-: r
-    $10 P2DIR cbis!
-    $10 P2OUT cbis! ;
+: led ( f -- )
+    $40 P2OUT cbit! ;
 
-\ turn red led off
-: o
-    $10 P2OUT cbic! ;
+\ crank up to 16Mhz, set led as ouput
+: init
+    16mhz
+    $40 P2DIR cbis!
+    true led ;
 
-\ turn left engine on (fwd)
-: lon
-    $20 P1DIR cbis!
-    $20 P1OUT cbis! ;
-
-\ turn left engine off (fwd)
-: loff
-    $20 P1OUT cbic! ;
-
-cornerstone cold
