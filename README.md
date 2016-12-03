@@ -33,16 +33,20 @@ led             ( n -- )                En/Disable red on-board led
 ## Wiring
 
 ### Serial
-Uart-RX P1.1 RXD
-Uart-TX P1.1 TXD
+| Description | Pin  | Function |
+| ----------- | ---- | -------- |
+| Uart-RX     | P1.1 | RXD      |
+| Uart-TX     | P1.1 | TXD      |
 
 ### Motor
-Left-EN   P2.0
-Left-FWD  P2.1 TA1.1
-Left-BWD  P2.2 TA1.1
-Right-EN  P2.3
-Right-FWD P2.4 TA1.2
-Right-BWD P2.5 TA1.2
+| Description | Pin  | Function |
+| ----------- | ---- | -------- |
+| Left-EN     | P2.0 |          |
+| Left-FWD    | P2.1 | TA1.1    |
+| Left-BWD    | P2.2 | TA1.1    |
+| Right-EN    | P2.3 |          |
+| Right-FWD   | P2.4 | TA1.2    |
+| Right-BWD   | P2.5 | TA1.2    |
 
 ### WS2812B
 Data P1.7 UCB0SIMO
