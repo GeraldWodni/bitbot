@@ -3,4 +3,5 @@
 #include basis.fs
 #include pwm.fs
 #include spi.fs
+#include music.fs
 #include init.fs

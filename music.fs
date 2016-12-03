@@ -4,9 +4,11 @@
 compiletoflash
 
 
-: hz ( u -- )    \ set frequency
+: hz ( u -- )   \ set frequency
     >r 1.000.000 r> um/mod \ SMCLK is 1Mhz, get period by division
-    TA1CCR0 ! ;
+    TA1CCR0 !
+    2 lm    \ don't move, just whine
+    2 rm ;  \ both engines (for better volume)
 
 : c  262 hz ;
 : c# 277 hz ;
@@ -20,7 +22,7 @@ compiletoflash
 : a  440 hz ;
 : a# 466 hz ;
 : h  494 hz ;
-: _    1 hz ;   \ "mute"
+: _ 0 lm 0 rm ;   \ mute
 
 \ note times
 : 1/8
@@ -30,8 +32,7 @@ compiletoflash
 
 : music-on
     motor-on    \ enable motors
-    1 lm        \ don't move, just whine
-    _ ;         \ "mute"
+    _ ;         \ mute
 
 \ twinkle twinkle
 : tw-tw
@@ -67,5 +68,3 @@ compiletoflash
     tw-up
     tw-tw
     motor-off ;
-
-twinkle
