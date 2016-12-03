@@ -54,5 +54,7 @@ led             ( n -- )                En/Disable red on-board led
 | Data        | P1.7 | UCB0SIMO |
 
 ### Debug
-Red-Led P2.6 TA0.1
-Reset RST (pulled up with 4k7, push-button against GND)
+| Description | Pin  | Function | Remark                                      |
+| ----------- | ---- | -------- |                                             |
+| Red-Led     | P2.6 | TA0.1    |                                             |
+| Reset       | RST  |          | pulled up with 4k7, push-button against GND |
