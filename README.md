@@ -49,7 +49,9 @@ led             ( n -- )                En/Disable red on-board led
 | Right-BWD   | P2.5 | TA1.2    |
 
 ### WS2812B
-Data P1.7 UCB0SIMO
+| Description | Pin  | Function |
+| ----------- | ---- | -------- |
+| Data        | P1.7 | UCB0SIMO |
 
 ### Debug
 Red-Led P2.6 TA0.1
