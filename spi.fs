@@ -93,7 +93,7 @@ compiletoflash
         dup $01 and if $E else $8 then >spi drop ;
 
 : flush ( -- )
-    buffer #buffer bounds do
+    buffer-bounds do
         i c@ >ws
     loop ;
 

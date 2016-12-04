@@ -1,11 +1,10 @@
-\ Use Motor coil-whining for music
+\ Music extensions with color animation on display
 \ (c)copyright 2016 by Gerald Wodni<gerald.wodni@gmail.com>
 
 \ Austrian music notation used: a is english h, okt stands for octave
 \ (as oct could be confused with `8 base !` )
 
 compiletoflash
-
 
 : hz ( u -- )   \ set frequency
     >r 1.000.000 r> um/mod \ SMCLK is 1Mhz, get period by division
@@ -18,8 +17,17 @@ compiletoflash
 : >okt ( u -- )
     4 - 0 max 2 min okt ! ;
 
+\ set stars
+: stars ( n-offset -- )
+    7 0 do
+        4 + dup >r
+        $FF.FF.FF r> #leds mod rgb-px!
+    loop flush ;
+
 \ octave shift
-: ohz okt @ lshift hz ;
+: ohz
+    dup stars
+    okt @ lshift hz ;
 
 : c  262 ohz ;
 : c# 277 ohz ;
@@ -35,8 +43,23 @@ compiletoflash
 : h  494 ohz ;
 : _ 0 lm 0 rm ;   \ mute
 
+\ dim non-zero lights
+: decay ( -- )
+    buffer-bounds do
+        i c@ ?dup if
+            1- i c!
+        then
+    loop flush ;
+
+: ms-decay ( -- )
+    2/
+    0 do
+        decay 2 ms
+    loop ;
+
+
 \ note times
-: 1/n ms _ 100 ms ;
+: 1/n ms-decay _ 100 ms ;
 : 1/16
     125 1/n ;
 : 1/8
@@ -83,6 +106,6 @@ compiletoflash
     music-on
     tw-tw
     tw-up
-    tw-up
-    tw-tw
+    \ tw-up
+    \ tw-tw
     motor-off ;
