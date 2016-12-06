@@ -4,6 +4,7 @@
 compiletoflash
 
 25 constant #leds
+5 constant cols
 #leds 2/ constant #leds/2
 #leds 3 * constant #buffer
 #buffer buffer: buffer
@@ -35,6 +36,18 @@ compiletoflash
 \ write n-th pixel in buffer
 : rgb-px! ( d-rgb index -- )
     led-addr rgb! ;
+
+\ zig-zagged xy-writer
+: xy! ( d-rgb x y -- )
+    dup $01 and \ odd?
+    if
+        cols 1- rot - swap \ invert x
+    then
+    cols * + \ y offset
+    abs #leds min \ ensure bounds
+    rgb-px! ;
+
+\ TODO: implement xy!? for bounds check
 
 \ fill buffer with color
 : buffer! ( d-rgb -- )
