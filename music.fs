@@ -9,9 +9,11 @@ compiletoflash
 
 : hz ( u -- )   \ set frequency
     >r 1.000.000 r> um/mod \ SMCLK is 1Mhz, get period by division
-    TA1CCR0 !
-    2 lm    \ don't move, just whine
-    2 rm ;  \ both engines (for better volume)
+    TA1CCR0 ! drop
+    TA1CCR0 @ 2/ TA1CCR1 !
+    TA1CCR0 @ 2/ TA1CCR2 ! ;
+    \ 2 lm    \ don't move, just whine
+    \ 2 rm ;  \ both engines (for better volume)
 
 \ we only allow octaves 4-6
 0 variable okt
@@ -37,6 +39,8 @@ compiletoflash
 
 \ note times
 : 1/n ms _ 100 ms ;
+: 1/32
+    125 1/n ;
 : 1/16
     125 1/n ;
 : 1/8
