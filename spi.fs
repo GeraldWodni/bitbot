@@ -37,15 +37,35 @@ compiletoflash
 : rgb-px! ( d-rgb index -- )
     led-addr rgb! ;
 
-\ zig-zagged xy-writer
-: xy! ( d-rgb x y -- )
+\ check if value is inside
+: inside ( n -- f )
+    dup 0 >=
+    swap cols < and ;
+
+\ convert xy into zig-zagged index
+: xy>n ( n-x n-y -- n )
     dup $01 and \ odd?
     if
         cols 1- rot - swap \ invert x
     then
-    cols * + \ y offset
-    abs #leds min \ ensure bounds
-    rgb-px! ;
+    cols * + ; \ y offset
+
+\ read pixel
+: xy@ ( x y -- d-rgb )
+    xy>n led-addr >r
+    r@ c@ \ green
+    8 lshift
+    r@ 2+ c@ or \ blue
+    r> 1+ c@ ; \ red
+
+\ write pixel
+: xy! ( d-rgb x y -- )
+    over inside
+    over inside and if
+        xy>n rgb-px!
+    else
+        2drop 2drop
+    then ;
 
 \ TODO: implement xy!? for bounds check
 

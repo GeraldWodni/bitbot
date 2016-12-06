@@ -46,3 +46,21 @@ $20.20.20 2variable tc
     2dup
         ." TODO: imlement me!"
     pos ;
+
+\ http://stackoverflow.com/questions/42519/how-do-you-rotate-a-two-dimensional-array
+\ transpose buffer
+: transpose ( -- ) ;
+
+\ mirror buffer
+: mirror ( -- ) ;
+
+: test-img ( -- )
+    #leds 0 do
+        #leds i - 0 i rgb-px!   \ blue background
+    loop
+    cols 1 do
+        $00.10.00 i i xy! \ green diagonal
+    loop
+    $3F.00.00 0 rgb-px! ; \ start-px
+
+test-img flush
