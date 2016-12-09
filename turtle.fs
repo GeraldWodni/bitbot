@@ -7,6 +7,9 @@ compiletoflash
 0 variable tx
 0 variable ty
 $20.20.20 2variable tc
+\ turtle offsets
+0 variable tox
+0 variable toy
 
 \ set turtle position
 : pos ( x y -- )
@@ -18,8 +21,8 @@ $20.20.20 2variable tc
 
 \ draw dot
 : dot ( -- )
-    tc 2@ tx @ ty @ xy! ;
-    \ cr ." DOT:" tx @ . ty @ . ." C:" tc 2@ hex d. decimal ;
+    tc 2@ tx @ tox @ +
+          ty @ toy @ + xy! ;
 
 \ order 2 number descending, increment higher
 : desc1+ ( u1 u2 -- u3 u4 )
@@ -47,12 +50,35 @@ $20.20.20 2variable tc
         ." TODO: imlement me!"
     pos ;
 
-\ http://stackoverflow.com/questions/42519/how-do-you-rotate-a-two-dimensional-array
+\ https://en.wikipedia.org/wiki/In-place_matrix_transposition
 \ transpose buffer
-: transpose ( -- ) ;
+: transpose ( -- )
+    cols 1- 0 do    \ for j = 0 to N - 2
+        cols i 1+ do \ for i = j + 1 to N - 1
+            j i xy@   \ swap A(j,i) with A(i,j)
+            i j xy@
+            j i xy!
+            i j xy!
+        loop
+    loop ;
 
-\ mirror buffer
-: mirror ( -- ) ;
+
+\ mirror buffer along y-axis
+: mirror ( -- )
+    cols 0 do       \ row (j)
+        cols 2/ 0 do \ column (i)
+            i  j xy@
+            cols 1- i - j xy@
+            i  j xy!
+            cols 1- i - j xy!
+        loop
+    loop ;
+
+\ http://stackoverflow.com/questions/42519/how-do-you-rotate-a-two-dimensional-array
+\ rotate clock-wise
+: cw ( -- )
+    transpose
+    mirror ;
 
 : test-img ( -- )
     #leds 0 do
@@ -61,6 +87,5 @@ $20.20.20 2variable tc
     cols 1 do
         $00.10.00 i i xy! \ green diagonal
     loop
-    $3F.00.00 0 rgb-px! ; \ start-px
-
-test-img flush
+    $3F.00.00 0 rgb-px!   \ start-px
+    $1F.1F.00 4 rgb-px! ; \ right-top-px
