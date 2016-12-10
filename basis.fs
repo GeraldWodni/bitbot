@@ -34,23 +34,23 @@ $6E constant UCB0RXBUF
 $6F constant UCB0TXBUF
 
 \ Timer A0_3 & A1_3
-$160 constant TA0CTL
-$170 constant TA0R 
-$162 constant TA0CCTL0 
-$172 constant TA0CCR0 
-$164 constant TA0CCTL1 
-$174 constant TA0CCR1 
-$166 constant TA0CCTL2 
-$176 constant TA0CCR2 
+\ $160 constant TA0CTL
+\ $170 constant TA0R
+\ $162 constant TA0CCTL0
+\ $172 constant TA0CCR0
+\ $164 constant TA0CCTL1
+\ $174 constant TA0CCR1
+\ $166 constant TA0CCTL2
+\ $176 constant TA0CCR2
 
 $180 constant TA1CTL
-$190 constant TA1R 
-$182 constant TA1CCTL0 
-$192 constant TA1CCR0 
-$184 constant TA1CCTL1 
-$194 constant TA1CCR1 
-$186 constant TA1CCTL2 
-$196 constant TA1CCR2 
+$190 constant TA1R
+$182 constant TA1CCTL0
+$192 constant TA1CCR0
+$184 constant TA1CCTL1
+$194 constant TA1CCR1
+$186 constant TA1CCTL2
+$196 constant TA1CCR2
 
 \ clock control
 $0056 constant DCOCTL
@@ -66,8 +66,8 @@ $0002 constant CAL_DCO_16MHZ
 : bounds ( c-addr n -- c-addr-end c-addr-start )
     over + swap ;
 
-: within ( test low high -- f )
-    over - >r - r> u< ;
+\ : within ( test low high -- f )
+\     over - >r - r> u< ;
 
 : cornerstone ( Name ) ( -- )
     <builds begin here $1FF and while 0 , repeat
@@ -100,7 +100,7 @@ $0002 constant CAL_DCO_16MHZ
     ." <" depth 0 .r ." > " depth 1+ 1 ?do depth i - pick . loop ;
 
 : u.n ( u n -- ) >u.n type ;
-: u.4 ( u -- ) 4 u.n ;
+\ : u.4 ( u -- ) 4 u.n ;
 : u.2 ( u -- ) 2 u.n ;
 
 \ set bit in addr to f

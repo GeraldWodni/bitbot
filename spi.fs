@@ -77,14 +77,14 @@ compiletoflash
     3 +loop 2drop ;
 
 \ print buffer in single line
-: buffer.. ( -- )
-    base @ hex 0
-    buffer-bounds do
-        i 1+ c@ u.2
-        i c@ u.2
-        i 2+ c@ u.2
-        bl emit
-    3 +loop drop base !  ;
+\ : buffer.. ( -- )
+\     base @ hex 0
+\     buffer-bounds do
+\         i 1+ c@ u.2
+\         i c@ u.2
+\         i 2+ c@ u.2
+\         bl emit
+\     3 +loop drop base !  ;
 
 \ initialize UCSI_B0 as SPI Master
 : init-spi ( -- )

@@ -45,10 +45,13 @@ $20.20.20 2variable tc
         loop
     then pos ; \ save new position
 
-: rect ( to-x to-y -- )
-    2dup
-        ." TODO: imlement me!"
-    pos ;
+: rect ( n-width n-height -- )
+    >r tx @ swap bounds \ horizontal bounds
+    ty @ r> bounds do   \ vertical loop
+        2dup do
+            i j pos dot \ draw
+        loop
+    loop 2drop ;
 
 \ https://en.wikipedia.org/wiki/In-place_matrix_transposition
 \ transpose buffer

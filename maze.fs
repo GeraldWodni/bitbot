@@ -2,7 +2,11 @@ compiletoflash
 
 \ draw maze
 : maze ( -- )
-    $20.20.00 buffer!
+    $00.00.3F buffer! \ background
+
+    0 0 pos         \ maze background
+    $1F.1F.00 color
+    10 dup rect
 
     0 0 pos         \ outer border
     $3F.00.00 color
@@ -44,3 +48,4 @@ compiletoflash
             bl of drop true endof
         endcase
     until ." done" ;
+drive

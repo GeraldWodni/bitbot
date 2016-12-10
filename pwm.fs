@@ -35,14 +35,3 @@ compiletoflash
     0 lm
     0 rm
     motor-off ;
-
-\ debug registers (TODO: delete)
-: pwm.
-    ." P2OUT:    " P2OUT c@ hex. cr
-    ." P2DIR:    " P2DIR c@ hex. cr
-    ." P2SEL:    " P2SEL c@ hex. cr
-    ." TA1CTL:   " TA1CTL @ hex. cr
-    ." TA0CCR0:  " TA0CCR0 @ hex. cr
-    ." TA0CCR1:  " TA0CCR1 @ hex. cr
-    ." TA1CCTL1: " TA1CCTL1 @ hex. cr ;
-
