@@ -6,7 +6,7 @@ compiletoflash
 : init
     init    \ basis-init
     init-pwm \ init motors
-    init-spi $10.00.10 leds \ setup WS2812B, and draw some power to keep powerbank running
+    init-spi $20.00.20 leds \ setup WS2812B, and draw some power to keep powerbank running
     ;
 
 cornerstone cold
