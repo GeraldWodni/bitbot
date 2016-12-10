@@ -35,16 +35,38 @@ compiletoflash
 
     8 4 pos dot ;
 
+\ forward
+: fwd ( -- )
+    2 1 xy@ $3F.00.00 d<> if    \ wall in front?
+         1 toy +! \ nope -> move
+    then ;
+
+\ backward
+: bwd ( -- )
+    2 3 xy@ $3F.00.00 d<> if    \ wall in front?
+        -1 toy +!
+    then ;
+
+\ left & right (will not be used in final version, just for testing
+: lft ( -- )
+    1 2 xy@ $3F.00.00 d<> if    \ wall in front?
+         1 tox +!
+    then ;
+: rgt ( -- )
+    3 2 xy@ $3F.00.00 d<> if    \ wall in front?
+        -1 tox +!
+    then ;
+
 \ drive in maze
 : drive ( -- )
     begin
         maze flush
         false
         key case
-            [CHAR] w of  1 toy +! endof
-            [CHAR] s of -1 toy +! endof
-            [CHAR] a of  1 tox +! endof
-            [CHAR] d of -1 tox +! endof
+            [CHAR] w of fwd endof
+            [CHAR] s of bwd endof
+            [CHAR] a of lft endof
+            [CHAR] d of rgt endof
             bl of drop true endof
         endcase
     until ." done" ;
