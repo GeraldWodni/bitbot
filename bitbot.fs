@@ -4,5 +4,6 @@
 #include pwm.fs
 #include spi.fs
 \ #include music.fs
+#include controller.fs
 #include turtle.fs
 #include init.fs

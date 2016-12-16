@@ -85,7 +85,7 @@ $0002 constant CAL_DCO_16MHZ
 
 \ us and ms which are multi-frequency aware
 : us clk-div* 0 ?do [ $3C00 , $3C00 , ] loop ;
-: ms clk-div* 0 ?do 998 us loop ;
+: ms 0 ?do 998 us loop ;
 
 \ number formating
 : >number ( n -- c-addr n-len )
@@ -115,5 +115,6 @@ $0002 constant CAL_DCO_16MHZ
 : init
     16mhz
     $40 P2DIR cbis!
+    $28 P1DIR cbis!
     true led ;
 
