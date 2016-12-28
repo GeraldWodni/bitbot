@@ -1,5 +1,11 @@
 compiletoflash
 
+\ #include smile.fs
+
+\ both motors
+: bm ( n-left n-right u-duration -- )
+    >r rm lm r> ms 0 rm 0 lm ;
+
 \ draw maze
 : maze ( -- )
     $00.00.3F buffer! \ background
@@ -33,41 +39,79 @@ compiletoflash
     7 6 line
     7 7 line
 
-    8 4 pos dot ;
+    8 4 pos dot
+
+    $00.7F.00 color \ target
+    3 3 pos dot ;
 
 \ forward
 : fwd ( -- )
     2 1 xy@ $3F.00.00 d<> if    \ wall in front?
          1 toy +! \ nope -> move
+         \ 75 100 200 bm
     then ;
 
 \ backward
 : bwd ( -- )
     2 3 xy@ $3F.00.00 d<> if    \ wall in front?
         -1 toy +!
+         \ -75 -100 200 bm
     then ;
 
 \ left & right (will not be used in final version, just for testing
 : lft ( -- )
     1 2 xy@ $3F.00.00 d<> if    \ wall in front?
          1 tox +!
+         \ -75 100 200 bm
     then ;
 : rgt ( -- )
     3 2 xy@ $3F.00.00 d<> if    \ wall in front?
         -1 tox +!
+         \ 75 -100 200 bm
     then ;
 
 \ drive in maze
-: drive ( -- )
+\ : drive ( -- )
+\     begin
+\         maze flush
+\         false
+\         key case
+\             [CHAR] w of fwd endof
+\             [CHAR] s of bwd endof
+\             [CHAR] a of lft endof
+\             [CHAR] d of rgt endof
+\             bl of drop true endof
+\         endcase
+\     until ." done" ;
+\ drive
+
+: nes-drive ( -- )
+    1 tox ! 1 toy !         \ reset position
+    motor-on
     begin
-        maze flush
-        false
-        key case
-            [CHAR] w of fwd endof
-            [CHAR] s of bwd endof
-            [CHAR] a of lft endof
-            [CHAR] d of rgt endof
-            bl of drop true endof
+        nes> >r
+        \ 1 r@ $3 and 5 + lshift \ calculate speed [None: 32, A: 64, B: 128, A+B: 256]
+
+        r@ $F0 and case
+            $10 of fwd endof \ forward
+            $20 of bwd endof \ backward ( mirror arrow )
+            $40 of lft endof \ left   ( rotate arrow )
+            $80 of rgt endof \ right
         endcase
-    until ." done" ;
-drive
+
+        maze $7F.7F.00 12 rgb-px! flush
+
+        tox @ -1 = toy @ -1 = and if
+            $3F.3F.00 leds
+            begin nes> $08 = until \ wait for start press
+            1 tox ! 1 toy !         \ reset position
+        then
+
+        \ wait for key-release
+        r> $F0 and if
+            begin nes> 0= until
+        then
+    key?
+    until
+    motor-off ;
+nes-drive
