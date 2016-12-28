@@ -7,3 +7,4 @@
 #include controller.fs
 #include turtle.fs
 #include init.fs
+#include maze.fs
