@@ -83,12 +83,12 @@ $20.20.20 2variable tc
     transpose
     mirror ;
 
-: test-img ( -- )
-    #leds 0 do
-        #leds i - 0 i rgb-px!   \ blue background
-    loop
-    cols 1 do
-        $00.10.00 i i xy! \ green diagonal
-    loop
-    $3F.00.00 0 rgb-px!   \ start-px
-    $1F.1F.00 4 rgb-px! ; \ right-top-px
+\ : test-img ( -- )
+\     #leds 0 do
+\         #leds i - 0 i rgb-px!   \ blue background
+\     loop
+\     cols 1 do
+\         $00.10.00 i i xy! \ green diagonal
+\     loop
+\     $3F.00.00 0 rgb-px!   \ start-px
+\     $1F.1F.00 4 rgb-px! ; \ right-top-px

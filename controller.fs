@@ -8,7 +8,7 @@ compiletoflash
 \ P1.4 DATA-IN  yellow                  4k7
 \ P1.5 LATCH    orange                  330R
 \ GND           brown
-$08 P1OUT 2constant CLK     
+$08 P1OUT 2constant CLK
 $10 P1IN  2constant DIN
 $20 P1OUT 2constant LATCH
 

@@ -53,14 +53,14 @@ $186 constant TA1CCTL2
 $196 constant TA1CCR2
 
 \ clock control
-$0056 constant DCOCTL
-$0057 constant BCSCTL1
-$0058 constant BCSCTL2
+\ $0056 constant DCOCTL
+\ $0057 constant BCSCTL1
+\ $0058 constant BCSCTL2
 
 \ calibration registers
-$10F6 constant TAG_DCO_30
-$0003 constant CAL_BC1_16MHZ
-$0002 constant CAL_DCO_16MHZ
+\ $10F6 constant TAG_DCO_30
+\ $0003 constant CAL_BC1_16MHZ
+\ $0002 constant CAL_DCO_16MHZ
 
 \ generic utils
 : bounds ( c-addr n -- c-addr-end c-addr-start )
@@ -75,16 +75,12 @@ $0002 constant CAL_DCO_16MHZ
 
 \ clock speed
 : 16mhz ( -- )
-    TAG_DCO_30 dup CAL_DCO_16MHZ + c@ DCOCTL  c! \ set calibrated DCO
-                   CAL_BC1_16MHZ + c@ BCSCTL1 c! \ set calibrated BC1
-                   $02 BCSCTL2 cbis!  ;          \ set SMCLK divider to 2
+    $10F6 dup $02 + c@ $56  c! \ set calibrated DCO
+                   $03 + c@ $57 c! \ set calibrated BC1
+                   $02 $58 cbis!  ;          \ set SMCLK divider to 2
 
-\ multiply by clock div
-: clk-div* ( n1 -- n2 )
-    BCSCTL2 c@ $02 and if 2* then ;
-
-\ us and ms which are multi-frequency aware
-: us clk-div* 0 ?do [ $3C00 , $3C00 , ] loop ;
+\ us and ms which are 16mhz pinned
+: us 2* 0 ?do [ $3C00 , $3C00 , ] loop ;
 : ms 0 ?do 998 us loop ;
 
 \ number formating
@@ -99,9 +95,9 @@ $0002 constant CAL_DCO_16MHZ
 : .s ( -- )
     ." <" depth 0 .r ." > " depth 1+ 1 ?do depth i - pick . loop ;
 
-: u.n ( u n -- ) >u.n type ;
+\ : u.n ( u n -- ) >u.n type ;
 \ : u.4 ( u -- ) 4 u.n ;
-: u.2 ( u -- ) 2 u.n ;
+\ : u.2 ( u -- ) 2 u.n ;
 
 \ set bit in addr to f
 : cbit! ( f x addr -- )

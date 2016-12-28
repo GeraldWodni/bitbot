@@ -6,6 +6,8 @@ compiletoflash
 : bm ( n-left n-right u-duration -- )
     >r rm lm r> ms 0 rm 0 lm ;
 
+0 variable angle
+
 \ draw maze
 : maze ( -- )
     $00.00.3F buffer! \ background
@@ -44,31 +46,56 @@ compiletoflash
     $00.7F.00 color \ target
     3 3 pos dot ;
 
+\ angle sensitive movement
+: dir+! ( n -- )
+    angle @ case
+        0 of toy +! endof
+        1 of tox +! endof
+        2 of negate toy +! endof
+        3 of negate tox +! endof
+    endcase ;
+
+: angle+! ( n -- )
+    angle @ +   \ add new offset
+    4 +         \ ensure it is positive
+    4 mod       \ clamp
+    dup . cr
+    angle ! ;   \ store
+
 \ forward
 : fwd ( -- )
-    2 1 xy@ $3F.00.00 d<> if    \ wall in front?
-         1 toy +! \ nope -> move
-         \ 75 100 200 bm
+    2 3 xy@ $3F.00.00 d<> if    \ wall in front?
+        \ -1 toy +! \ nope -> move
+        -1 dir+!
+         55 80 80 bm
     then ;
 
 \ backward
 : bwd ( -- )
-    2 3 xy@ $3F.00.00 d<> if    \ wall in front?
-        -1 toy +!
-         \ -75 -100 200 bm
+    2 1 xy@ $3F.00.00 d<> if    \ wall in front?
+         1 dir+!
+         \ 1 toy +! \ nope -> move
+         -55 -80 80 bm
     then ;
 
 \ left & right (will not be used in final version, just for testing
 : lft ( -- )
-    1 2 xy@ $3F.00.00 d<> if    \ wall in front?
-         1 tox +!
+    \ 1 2 xy@ $3F.00.00 d<> if    \ wall in front?
+         \ 1 tox +!
          \ -75 100 200 bm
-    then ;
+         -55 80 550 bm
+         1 angle+!
+    \ then ;
+    ;
 : rgt ( -- )
-    3 2 xy@ $3F.00.00 d<> if    \ wall in front?
-        -1 tox +!
+    \ 3 2 xy@ $3F.00.00 d<> if    \ wall in front?
+        \ -1 tox +!
          \ 75 -100 200 bm
-    then ;
+         55 -80 550 bm
+         \ -1 angle +!
+         -1 angle+!
+    \ then ;
+    ;
 
 \ drive in maze
 \ : drive ( -- )
@@ -99,7 +126,9 @@ compiletoflash
             $80 of rgt endof \ right
         endcase
 
-        maze $7F.7F.00 12 rgb-px! flush
+        maze
+        angle @ 0 ?do cw loop
+        $7F.7F.00 12 rgb-px! flush
 
         tox @ -1 = toy @ -1 = and if
             $3F.3F.00 leds

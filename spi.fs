@@ -130,8 +130,6 @@ compiletoflash
         i c@ >ws
     loop ;
 
-: f flush ;
-
 \ interaction words
 
 \ fill buffer and flush
